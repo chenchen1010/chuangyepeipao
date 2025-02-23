@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>杭州创业空间展示</title>
+    <link rel="stylesheet" href="./assets/styles/main.css">
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=S0AE7eUKaLHl12fuEwrrV3zWZQnLxJ0E"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+      .dev-notice {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        z-index: 1000;
+        max-width: 80%;
+        text-align: center;
+      }
+      .dev-notice.show {
+        display: block;
+      }
+      .dev-notice code {
+        background: #f5f5f5;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="dev-notice" class="dev-notice">
+      <h3>请使用本地服务器访问</h3>
+      <p>直接打开文件可能导致地图无法正常加载。请按以下步骤操作：</p>
+      <ol style="text-align: left">
+        <li>打开终端</li>
+        <li>进入项目目录：<code>cd /Users/burning/杭州创业网站</code></li>
+        <li>启动本地服务器：<code>python3 -m http.server 8080</code></li>
+        <li>在浏览器中访问：<code>http://localhost:8080</code></li>
+      </ol>
+      <button onclick="this.parentElement.style.display='none'" style="margin-top: 10px">我知道了</button>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <div class="filter-section">
+                <h3>筛选条件</h3>
+                <div class="filter-group">
+                    <label>区域选择：</label>
+                    <select id="district-filter">
+                        <option value="">全部区域</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>
+                        <input type="checkbox" id="vacancy-filter">
+                        只看有空余房间
+                    </label>
+                </div>
+            </div>
+            <div class="space-list" id="space-list">
+                <!-- 场地列表将通过JavaScript动态生成 -->
+            </div>
+        </div>
+        <div id="map-container" class="map-container"></div>
+    </div>
+    <script src="./assets/scripts/data.js"></script>
+    <script src="./assets/scripts/main.js"></script>
+    <script>
+      // 检测是否是通过 file:// 协议访问
+      if (window.location.protocol === 'file:') {
+        document.getElementById('dev-notice').classList.add('show');
+      }
+    </script>
+  </body>
+</html> 
