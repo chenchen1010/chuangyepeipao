@@ -32,6 +32,21 @@ function init() {
                     <img src="./assets/images/qrcode.png" alt="联系我们">
                     <p>1V1咨询/联系看场地</p>
                 </div>
+                <div class="value-added-services">
+                    <h4>增值服务</h4>
+                    <div class="service-tags">
+                        <span class="service-tag">企业开办（营业执照、公章、银行开户）</span>
+                        <span class="service-tag">代理记账报税</span>
+                        <span class="service-tag">创业租房补贴申报</span>
+                        <span class="service-tag">大学生创业无偿补贴申报</span>
+                        <span class="service-tag">创业其他各类补贴</span>
+                        <span class="service-tag">省科小/国高项目申报</span>
+                        <span class="service-tag">商标注册</span>
+                        <span class="service-tag">知识产权</span>
+                        <span class="service-tag">人力资源服务</span>
+                        <span class="service-tag">法务咨询</span>
+                    </div>
+                </div>
             </div>
         `;
         document.body.appendChild(contactCard);
@@ -156,10 +171,10 @@ function addMarkersToMap(spaces) {
                         ${space.features.length > 0 ? `
                             <div>
                                 <div style="color: #666; margin-bottom: 4px; font-size: 13px;">服务特色</div>
-                                <div style="color: #333;">
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
                                     ${space.features.map(feature => 
-                                        `<span style="display: inline-block; background: #f5f5f7; padding: 2px 8px; 
-                                            border-radius: 4px; margin: 0 5px 5px 0; font-size: 13px;">${feature}</span>`
+                                        `<span style="display: inline-block; background: #f0f2f5; padding: 4px 12px; 
+                                            border-radius: 20px; font-size: 13px; color: #1a73e8;">${feature}</span>`
                                     ).join('')}
                                 </div>
                             </div>
@@ -252,10 +267,10 @@ function addMarkersToMap(spaces) {
 
                 .contact-card-content {
                     padding: 12px;
-                    width: 260px;
+                    width: 300px;
                     display: flex;
                     flex-direction: column;
-                    gap: 8px;
+                    gap: 12px;
                     background: white;
                     border-radius: 12px 0 0 12px;
                     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
@@ -333,6 +348,40 @@ function addMarkersToMap(spaces) {
 
                 .contact-card.collapsed .arrow-icon {
                     transform: rotate(180deg);
+                }
+
+                .value-added-services {
+                    text-align: left;
+                    padding: 0 4px;
+                }
+
+                .value-added-services h4 {
+                    font-size: 14px;
+                    color: #333;
+                    margin: 0 0 8px 0;
+                    font-weight: 600;
+                }
+
+                .service-tags {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 6px;
+                }
+
+                .service-tag {
+                    display: inline-block;
+                    padding: 4px 10px;
+                    background: #f0f2f5;
+                    color: #1a73e8;
+                    border-radius: 20px;
+                    font-size: 12px;
+                    line-height: 1.4;
+                    white-space: nowrap;
+                }
+
+                .service-tag:hover {
+                    background: #e8f0fe;
+                    color: #1557b0;
                 }
             `;
             document.head.appendChild(style);

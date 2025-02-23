@@ -93,7 +93,7 @@ async function loadExcelData() {
                 district: row['所属区域'] || '',
                 address: row['详细地址'] || '',
                 description: row['空间简介'] || '',
-                features: (row['服务特色'] || '').split('/').map(s => s.trim()).filter(Boolean),
+                features: (row['服务特色'] || '').split(/\s+/).map(s => s.trim()).filter(Boolean),
                 coordinates: coordinates,
                 hasVacancy: row['是否有空余'] === '是',
                 images: [row['场地大纲图片'] || ''],
