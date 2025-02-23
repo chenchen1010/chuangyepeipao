@@ -196,7 +196,7 @@ function addMarkersToMap(spaces) {
             <div style="padding: 15px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 <h2 style="margin: 0 0 15px 0; font-size: 18px; color: #1d1d1f; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">${space.name}</h2>
                 
-                <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; height: 300px;">
                     <div style="flex: 1; min-width: 200px;">
                         <div style="margin-bottom: 12px;">
                             <div style="color: #666; margin-bottom: 4px; font-size: 13px;">地址</div>
@@ -207,21 +207,14 @@ function addMarkersToMap(spaces) {
                             <div style="flex: 1;">
                                 <div style="color: #666; margin-bottom: 4px; font-size: 13px;">总面积</div>
                                 <div style="color: #333;">${(() => {
-                                    // console.log(`[信息窗口] 显示面积数据:`, {
-                                    //     原始值: space.area,
-                                    //     类型: typeof space.area,
-                                    //     是否为数字: !isNaN(space.area)
-                                    // });
                                     if (!space.area || isNaN(space.area)) {
                                         return '暂无数据';
                                     }
                                     try {
-                                        // 保留两位小数
                                         const formatted = Number(space.area).toLocaleString('zh-CN', {
                                             minimumFractionDigits: 2,
                                             maximumFractionDigits: 2
                                         });
-                                        // console.log(`[信息窗口] 格式化后的面积: ${formatted}`);
                                         return formatted + ' m²';
                                     } catch (error) {
                                         console.error(`[信息窗口] 面积格式化错误:`, error);
@@ -254,9 +247,11 @@ function addMarkersToMap(spaces) {
                         ` : ''}
                     </div>
 
-                    <div style="flex: 1; min-width: 200px;">
+                    <div style="flex: 1; min-width: 200px; display: flex; flex-direction: column; height: 100%;">
                         <div style="color: #666; margin-bottom: 4px; font-size: 13px;">场地简介</div>
-                        <div style="color: #333; line-height: 1.5;">${space.description}</div>
+                        <div style="color: #333; line-height: 1.5; overflow-y: auto; padding-right: 8px; height: calc(100% - 25px);">
+                            <div style="padding-right: 4px;">${space.description}</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -320,6 +315,25 @@ function addMarkersToMap(spaces) {
                 /* 移除小箭头 */
                 .BMap_bubble_pop > div:last-child > img {
                     display: none !important;
+                }
+
+                /* 自定义滚动条样式 */
+                .BMap_bubble_content ::-webkit-scrollbar {
+                    width: 6px;
+                }
+                
+                .BMap_bubble_content ::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                    border-radius: 3px;
+                }
+                
+                .BMap_bubble_content ::-webkit-scrollbar-thumb {
+                    background: #c1c1c1;
+                    border-radius: 3px;
+                }
+                
+                .BMap_bubble_content ::-webkit-scrollbar-thumb:hover {
+                    background: #a8a8a8;
                 }
 
                 /* 联系卡片样式 */
