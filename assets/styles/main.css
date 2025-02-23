@@ -13,6 +13,8 @@ body {
 .container {
     display: flex;
     height: 100vh;
+    margin-top: 56px;
+    height: calc(100vh - 56px);
 }
 
 .sidebar {
@@ -112,4 +114,46 @@ select, input[type="number"] {
 .no-vacancy {
     background: #ffebee;
     color: #c62828;
+}
+
+/* 导航栏样式 */
+.navbar {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.navbar-container {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-left: 0px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navbar-logo {
+    width: 32px;
+    height: 32px;
+}
+
+.navbar-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.navbar-subtitle {
+    font-size: 16px;
+    color: #666;
+    margin-left: 12px;
 } 

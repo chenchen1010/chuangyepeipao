@@ -26,7 +26,7 @@ function getCoordinates(address) {
 async function loadExcelData() {
     try {
         console.log('开始读取Excel文件...');
-        const response = await fetch('杭州创业办公空间_103个.xlsx');
+        const response = await fetch('杭州创业办公空间_102个.xlsx');
         const arrayBuffer = await response.arrayBuffer();
         const data = new Uint8Array(arrayBuffer);
         const workbook = XLSX.read(data, { type: 'array' });
@@ -38,7 +38,7 @@ async function loadExcelData() {
         
         // 将工作表转换为JSON
         const jsonData = XLSX.utils.sheet_to_json(worksheet);
-        console.log('原始Excel数据:', jsonData);
+        // console.log('原始Excel数据:', jsonData);
         
         // 获取所有唯一的区域
         const districts = [...new Set(jsonData.map(row => row['所属区域']).filter(Boolean))].sort();
@@ -54,8 +54,44 @@ async function loadExcelData() {
         // 转换数据格式并获取经纬度
         const spacesPromises = jsonData.map(async (row, index) => {
             // 处理面积字符串，移除 m² 单位并转换为数字
-            const areaStr = (row['面积'] || '').toString();
-            const areaNum = parseFloat(areaStr.replace('m²', '').trim());
+            // console.log('原始行数据:', row);  // 打印完整的行数据
+            const rawArea = row['总面积'];  // 修改字段名为"总面积"
+            // console.log(`[面积处理] 原始数据类型: ${typeof rawArea}, 值:`, rawArea);
+            
+            let areaNum = 0;
+            if (rawArea !== undefined && rawArea !== null) {
+                // 如果是数字类型，直接使用
+                if (typeof rawArea === 'number') {
+                    areaNum = rawArea;
+                    // console.log(`[面积处理] 数字类型，直接使用: ${areaNum}`);
+                } else {
+                    // 如果不是数字类型，进行字符串处理
+                    const areaStr = rawArea.toString();
+                    // console.log(`[面积处理] 转字符串: "${areaStr}"`);
+                    
+                    const cleanAreaStr = areaStr
+                        .replace(/m²|㎡/g, '')  // 移除单位（支持两种写法）
+                        .replace(/,/g, '')   // 移除逗号
+                        .replace(/\s+/g, '') // 移除所有空格
+                        .trim();             // 移除首尾空格
+                    
+                    // console.log(`[面积处理] 清理后的字符串: "${cleanAreaStr}"`);
+                    areaNum = parseFloat(cleanAreaStr);
+                    // console.log(`[面积处理] 最终数值: ${areaNum}`);
+                }
+
+                // 如果转换结果为 NaN，打印更多信息
+                if (isNaN(areaNum)) {
+                    console.warn(`[面积处理警告] 面积转换失败:`, {
+                        原始值: rawArea,
+                        原始类型: typeof rawArea,
+                        数值: areaNum
+                    });
+                    areaNum = 0;  // 转换失败时设为0
+                }
+            } else {
+                console.warn(`[面积处理警告] 面积数据缺失`);
+            }
 
             // 获取经纬度
             let coordinates;
@@ -89,7 +125,7 @@ async function loadExcelData() {
             const space = {
                 id: (index + 1).toString(),
                 name: row['场地名称'] || '',
-                area: areaNum || 0,
+                area: areaNum,  // 移除 || 0，因为我们已经在上面处理了默认值
                 district: row['所属区域'] || '',
                 address: row['详细地址'] || '',
                 description: row['空间简介'] || '',

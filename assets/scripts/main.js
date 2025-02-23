@@ -22,10 +22,10 @@ function init() {
             </button>
             <div class="contact-card-content">
                 <div class="contact-info">
-                    <h3>千万间新青年</h3>
+                    <h3>为新创业人提供咨询/服务</h3>
                     <div class="description">
-                        <p>提供杭州在地优质服务</p>
-                        <p>陪伴千万新一代青年人成长</p>
+                        <p>欢迎全国人民来杭州创业</p>
+                        <p>受益杭州创业友好环境/福利政策</p>
                     </div>
                 </div>
                 <div class="contact-qrcode">
@@ -37,7 +37,7 @@ function init() {
                     <div class="service-tags">
                         <span class="service-tag">企业开办（营业执照、公章、银行开户）</span>
                         <span class="service-tag">代理记账报税</span>
-                        <span class="service-tag">创业租房补贴申报</span>
+                        <span class="service-tag" onclick="showRentSubsidyInfo()">创业租房补贴申报</span>
                         <span class="service-tag">大学生创业无偿补贴申报</span>
                         <span class="service-tag">创业其他各类补贴</span>
                         <span class="service-tag">省科小/国高项目申报</span>
@@ -50,6 +50,58 @@ function init() {
             </div>
         `;
         document.body.appendChild(contactCard);
+
+        // 添加创业租房补贴信息弹窗
+        const subsidyInfoModal = document.createElement('div');
+        subsidyInfoModal.className = 'subsidy-modal';
+        subsidyInfoModal.innerHTML = `
+            <div class="subsidy-modal-content">
+                <div class="subsidy-modal-header">
+                    <h2>杭州创业租房补贴政策</h2>
+                    <button onclick="hideRentSubsidyInfo()" class="close-btn">&times;</button>
+                </div>
+                <div class="subsidy-modal-body">
+                    <h3>申请条件</h3>
+                    <p>公司法人需符合以下条件之一：</p>
+                    <ul>
+                        <li>在校大学生</li>
+                        <li>毕业5年以内高校毕业生（创立时属于就行）</li>
+                        <li>自主择业军转干部和自主就业退役士兵</li>
+                        <li>登记失业半年以上人员或就业困难人员</li>
+                        <li>持证残疾人</li>
+                    </ul>
+
+                    <h3>补贴标准</h3>
+                    <ul>
+                        <li>补贴金额：最高3元/平方米·天</li>
+                        <li>补贴面积：最高50平方米</li>
+                        <li>补贴期限：不超过3年</li>
+                        <li>最高补贴：54,750元/年（3*50*365）</li>
+                    </ul>
+
+                    <h3>申请流程</h3>
+                    <ol>
+                        <li>入驻创业陪跑空间（一般押一付三，看空间情况）</li>
+                        <li>法人需在公司交社保满6个月（在校生无需交社保）</li>
+                        <li>首次申领补贴</li>
+                        <li>后续每6个月申请一次</li>
+                    </ol>
+
+                    <h3>常见问题</h3>
+                    <div class="faq-section">
+                        <p><strong>Q：大专生可以申请吗？</strong></p>
+                        <p>A：可以，只要是全日制院校都可以</p>
+                        
+                        <p><strong>Q：人不在杭州可以申请吗？</strong></p>
+                        <p>A：可以，无需法人必须在场的流程。其中银行开户委托人代办需要法人身份证原件</p>
+                        
+                        <p><strong>Q：在校生需要交社保吗？</strong></p>
+                        <p>A：不需要</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(subsidyInfoModal);
 
         // 添加收缩功能
         const toggleBtn = contactCard.querySelector('.toggle-btn');
@@ -153,8 +205,29 @@ function addMarkersToMap(spaces) {
 
                         <div style="display: flex; gap: 15px; margin-bottom: 12px;">
                             <div style="flex: 1;">
-                                <div style="color: #666; margin-bottom: 4px; font-size: 13px;">面积</div>
-                                <div style="color: #333;">${space.area}㎡</div>
+                                <div style="color: #666; margin-bottom: 4px; font-size: 13px;">总面积</div>
+                                <div style="color: #333;">${(() => {
+                                    // console.log(`[信息窗口] 显示面积数据:`, {
+                                    //     原始值: space.area,
+                                    //     类型: typeof space.area,
+                                    //     是否为数字: !isNaN(space.area)
+                                    // });
+                                    if (!space.area || isNaN(space.area)) {
+                                        return '暂无数据';
+                                    }
+                                    try {
+                                        // 保留两位小数
+                                        const formatted = Number(space.area).toLocaleString('zh-CN', {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        });
+                                        // console.log(`[信息窗口] 格式化后的面积: ${formatted}`);
+                                        return formatted + ' m²';
+                                    } catch (error) {
+                                        console.error(`[信息窗口] 面积格式化错误:`, error);
+                                        return '数据格式错误';
+                                    }
+                                })()}</div>
                             </div>
                             <div style="flex: 1;">
                                 <div style="color: #666; margin-bottom: 4px; font-size: 13px;">房间状态</div>
@@ -383,11 +456,131 @@ function addMarkersToMap(spaces) {
                     background: #e8f0fe;
                     color: #1557b0;
                 }
+
+                /* 补贴政策弹窗样式 */
+                .subsidy-modal {
+                    display: none;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.5);
+                    z-index: 2000;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .subsidy-modal-content {
+                    background: white;
+                    width: 90%;
+                    max-width: 600px;
+                    max-height: 80vh;
+                    border-radius: 12px;
+                    overflow-y: auto;
+                    position: relative;
+                }
+
+                .subsidy-modal-header {
+                    padding: 16px 20px;
+                    border-bottom: 1px solid #eee;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    position: sticky;
+                    top: 0;
+                    background: white;
+                    z-index: 1;
+                }
+
+                .subsidy-modal-header h2 {
+                    margin: 0;
+                    font-size: 18px;
+                    color: #333;
+                }
+
+                .close-btn {
+                    background: none;
+                    border: none;
+                    font-size: 24px;
+                    color: #666;
+                    cursor: pointer;
+                    padding: 0;
+                    width: 32px;
+                    height: 32px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                }
+
+                .close-btn:hover {
+                    background: #f5f5f5;
+                }
+
+                .subsidy-modal-body {
+                    padding: 20px;
+                }
+
+                .subsidy-modal-body h3 {
+                    color: #1a73e8;
+                    margin: 20px 0 12px;
+                    font-size: 16px;
+                }
+
+                .subsidy-modal-body ul,
+                .subsidy-modal-body ol {
+                    padding-left: 20px;
+                    margin: 8px 0;
+                }
+
+                .subsidy-modal-body li {
+                    margin: 8px 0;
+                    line-height: 1.5;
+                    color: #333;
+                }
+
+                .faq-section p {
+                    margin: 8px 0;
+                    line-height: 1.6;
+                }
+
+                .faq-section strong {
+                    color: #1a73e8;
+                }
+
+                .service-tag {
+                    cursor: pointer;
+                }
             `;
             document.head.appendChild(style);
         }
     });
 }
+
+// 显示创业租房补贴信息
+function showRentSubsidyInfo() {
+    const modal = document.querySelector('.subsidy-modal');
+    modal.style.display = 'flex';
+    // 阻止背景滚动
+    document.body.style.overflow = 'hidden';
+}
+
+// 隐藏创业租房补贴信息
+function hideRentSubsidyInfo() {
+    const modal = document.querySelector('.subsidy-modal');
+    modal.style.display = 'none';
+    // 恢复背景滚动
+    document.body.style.overflow = '';
+}
+
+// 点击模态框外部关闭
+document.addEventListener('click', (e) => {
+    const modal = document.querySelector('.subsidy-modal');
+    if (e.target === modal) {
+        hideRentSubsidyInfo();
+    }
+});
 
 // 聚焦到特定场地
 function focusSpace(spaceId) {
