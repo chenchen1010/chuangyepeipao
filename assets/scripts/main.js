@@ -22,10 +22,10 @@ function init() {
             </button>
             <div class="contact-card-content">
                 <div class="contact-info">
-                    <h3>为新创业人提供咨询/服务</h3>
+                    <h3>为新创业人保驾护航</h3>
                     <div class="description">
                         <p>欢迎全国人民来杭州创业</p>
-                        <p>受益杭州创业友好环境/福利政策</p>
+                        <p>享受杭州创业友好环境/福利政策</p>
                     </div>
                 </div>
                 <div class="contact-qrcode">
