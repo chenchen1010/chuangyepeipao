@@ -38,7 +38,7 @@ function init() {
                         <span class="service-tag">企业开办（营业执照、公章、银行开户）</span>
                         <span class="service-tag">代理记账报税</span>
                         <span class="service-tag" onclick="showRentSubsidyInfo()">创业租房补贴申报</span>
-                        <span class="service-tag">大学生创业无偿补贴申报</span>
+                        <span class="service-tag" onclick="showStartupSubsidyInfo()">大学生创业无偿补贴申报</span>
                         <span class="service-tag">创业其他各类补贴</span>
                         <span class="service-tag">省科小/国高项目申报</span>
                         <span class="service-tag">商标注册</span>
@@ -102,6 +102,93 @@ function init() {
             </div>
         `;
         document.body.appendChild(subsidyInfoModal);
+
+        // 添加添加大学生创业无偿补贴信息弹窗
+        const startupSubsidyModal = document.createElement('div');
+        startupSubsidyModal.className = 'subsidy-modal';
+        startupSubsidyModal.innerHTML = `
+            <div class="subsidy-modal-content">
+                <div class="subsidy-modal-header">
+                    <h2>杭州大学生创业无偿补贴政策</h2>
+                    <button onclick="hideStartupSubsidyInfo()" class="close-btn">&times;</button>
+                </div>
+                <div class="subsidy-modal-body">
+                    <h3>补贴金额</h3>
+                    <ul>
+                        <li>基础补贴：5-20万元（分为5万、10万、20万三档）</li>
+                        <li>优秀项目：最高可达50万元（"一事一议"）</li>
+                        <li>特别优秀项目：最高可达500万元</li>
+                        <li>注：评审通过率约90%</li>
+                    </ul>
+
+                    <h3>申请条件</h3>
+                    <ul>
+                        <li>法人资格：
+                            <ul>
+                                <li>毕业5年内的普通高校毕业生</li>
+                                <li>全国高校在校生（全日制大专及以上），需学信网可查</li>
+                                <li>在公司占股30%以上</li>
+                            </ul>
+                        </li>
+                        <li>企业要求：
+                            <ul>
+                                <li>在杭州注册的企业</li>
+                                <li>正常运营6个月以上</li>
+                                <li>法人社保在公司缴纳满6个月（在校生无需）</li>
+                                <li>必须有实际经营场地，不能是挂靠地址</li>
+                                <li>注册资本最好不低于10万元（无需实缴）</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h3>申请材料</h3>
+                    <ol>
+                        <li>《杭州市大学生创业资助资金申请表》</li>
+                        <li>身份证、毕业证书、营业执照等证明材料</li>
+                        <li>相关支出合同、凭证</li>
+                        <li>商业计划书（项目可行性报告）</li>
+                        <li>当年注册的要验资报告，上年注册的要审计报告</li>
+                    </ol>
+
+                    <h3>申请流程</h3>
+                    <ol>
+                        <li>核对申报条件，确认申请时间</li>
+                        <li>准备并提交申请材料（注意：每个区的申请条件和时间可能不同）</li>
+                        <li>人社局初审
+                            <ul>
+                                <li>如有需要补正的材料，按要求修改</li>
+                                <li>初审通过后会进行实地走访，查看经营场地</li>
+                            </ul>
+                        </li>
+                        <li>项目评审答辩
+                            <ul>
+                                <li>准备路演PPT</li>
+                                <li>8分钟项目陈述</li>
+                                <li>7分钟专家提问环节</li>
+                            </ul>
+                        </li>
+                        <li>评审结果公示</li>
+                        <li>材料归档，发放补贴</li>
+                    </ol>
+
+                    <h3>常见问题</h3>
+                    <div class="faq-section">
+                        <p><strong>Q：大专生可以申请吗？</strong></p>
+                        <p>A：可以，只要是全日制院校都可以申请</p>
+                        
+                        <p><strong>Q：必须是杭州的学校吗？</strong></p>
+                        <p>A：不一定。毕业生只要是全国普通高校毕业5年内即可；在校生只要学信网可查即可</p>
+                        
+                        <p><strong>Q：创业项目有行业限制吗？</strong></p>
+                        <p>A：没有限制，自媒体、实体、电商、软件开发、设计、咨询等都可以申请</p>
+
+                        <p><strong>Q：注册地址有要求吗？</strong></p>
+                        <p>A：必须有实际办公场地，不能使用挂靠地址，人社局会实地走访核实</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(startupSubsidyModal);
 
         // 添加收缩功能
         const toggleBtn = contactCard.querySelector('.toggle-btn');
@@ -464,11 +551,32 @@ function addMarkersToMap(spaces) {
                     font-size: 12px;
                     line-height: 1.4;
                     white-space: nowrap;
+                    transition: all 0.3s ease;
                 }
 
-                .service-tag:hover {
+                .service-tag[onclick] {
                     background: #e8f0fe;
-                    color: #1557b0;
+                    border: 1px solid #1a73e8;
+                    padding: 3px 9px;
+                    cursor: pointer;
+                    position: relative;
+                }
+
+                .service-tag[onclick]::after {
+                    content: '👆';
+                    font-size: 10px;
+                    margin-left: 4px;
+                    display: inline-block;
+                }
+
+                .service-tag[onclick]:hover {
+                    background: #d2e3fc;
+                    transform: translateY(-1px);
+                    box-shadow: 0 2px 4px rgba(26, 115, 232, 0.1);
+                }
+
+                .service-tag:not([onclick]):hover {
+                    background: #e8f0fe;
                 }
 
                 /* 补贴政策弹窗样式 */
@@ -588,12 +696,31 @@ function hideRentSubsidyInfo() {
     document.body.style.overflow = '';
 }
 
-// 点击模态框外部关闭
+// 显示大学生创业无偿补贴信息
+function showStartupSubsidyInfo() {
+    const modal = document.querySelector('.subsidy-modal:last-child');
+    modal.style.display = 'flex';
+    // 阻止背景滚动
+    document.body.style.overflow = 'hidden';
+}
+
+// 隐藏大学生创业无偿补贴信息
+function hideStartupSubsidyInfo() {
+    const modal = document.querySelector('.subsidy-modal:last-child');
+    modal.style.display = 'none';
+    // 恢复背景滚动
+    document.body.style.overflow = '';
+}
+
+// 点击模态框外部关闭（更新现有的事件监听器）
 document.addEventListener('click', (e) => {
-    const modal = document.querySelector('.subsidy-modal');
-    if (e.target === modal) {
-        hideRentSubsidyInfo();
-    }
+    const modals = document.querySelectorAll('.subsidy-modal');
+    modals.forEach(modal => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+    });
 });
 
 // 聚焦到特定场地
